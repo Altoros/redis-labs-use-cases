@@ -2,7 +2,8 @@
   "name": "HelloIonic",
   "private": "true",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.2.4"
+    "ionic": "driftyco/ionic-bower#1.2.4",
+    "ionic-platform-web-client": "^0.7.1"
   },
   "dependencies": {
     "ionic-ion-tinder-cards": "ionic-contrib-tinder-cards#*",
