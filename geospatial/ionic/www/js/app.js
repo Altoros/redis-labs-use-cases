@@ -8,7 +8,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 .run(function($ionicPlatform, $rootScope, $localStorage, uuid4) {
 
-  $rootScope.apiBase = 'http://localhost:3000';
+  $rootScope.apiBase = 'http://redis-geospatial.herokuapp.com';
 
   //Default uuid
   $rootScope.storage = $localStorage.$default({ 'uuid' : uuid4.generate() });
