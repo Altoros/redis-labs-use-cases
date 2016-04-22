@@ -8,8 +8,9 @@
       Your Name Here
     </author>
   <content src="index.html"/>
+  <allow-navigation href="*" />
+  <allow-intent href="*" />
   <access origin="*"/>
-  <allow-navigation href="*://*.googleapis.com/*"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
