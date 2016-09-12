@@ -31,7 +31,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   });
 })
 
-.config(function($httpProvider) {
+.config(function($httpProvider, $ionicConfigProvider) {
+  $ionicConfigProvider.backButton.text('').previousTitleText(false);
+  $ionicConfigProvider.views.transition('none');
+
   $httpProvider.interceptors.push(function($rootScope) {
     return {
       'request': function(config) {
@@ -81,6 +84,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         resolve: {
           tweetFavorites: function(tweet) {
             return tweet.getFavorites().then(function(r) {
+              return r.data.result;
+            });
+          }
+        }
+      }
+    }
+  })
+
+  .state('app.nopes', {
+    url: '/nopes',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/nopes.html',
+        controller: 'TweetNopeCtrl',
+        resolve: {
+          tweetNopes: function(tweet) {
+            return tweet.getNopes().then(function(r) {
               return r.data.result;
             });
           }

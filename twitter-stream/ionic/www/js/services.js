@@ -42,6 +42,10 @@ angular.module('starter.services', [])
     return $http.get($rootScope.apiBase + '/likes/' + $rootScope.channel);
   };
 
+  _tweet.getNopes = function() {
+    return $http.get($rootScope.apiBase + '/nopes/' + $rootScope.channel);
+  };
+
   _tweet.getChannels = function() {
     return $http.get($rootScope.apiBase + '/channels/');
   };

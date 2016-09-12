@@ -30,6 +30,8 @@
     **ZREVRANGE(voteIndex:CHANNEL ,0,9)**
   1. findLikes: Search likes for user on channel
     **SMEMBERS(likeSet:USERID:CHANNEL)**
+  1. findNopes: Search nopes for user on channel
+    **SMEMBERS(nopeSet:USERID:CHANNEL)**
   1. voteTweet:
     **ZINCRBY(voteIndex:CHANNEL, 1, tweetId)**
   1. findToSwipe: List All tweets (but not swiped ones)

@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -8,7 +8,6 @@ angular.module('starter.controllers', [])
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
 })
 
 .controller('TweetListCtrl', function($scope, $rootScope, tweet, $q) {
@@ -72,6 +71,9 @@ angular.module('starter.controllers', [])
   $scope.tweets = tweetFavorites;
 })
 
+.controller('TweetNopeCtrl', function($scope, $stateParams, tweetNopes) {
+  $scope.tweets = tweetNopes;
+})
 
 .controller('RecommendationCtrl', function($scope, $stateParams, tweetList) {
   $scope.tweets = tweetList;

@@ -1,4 +1,9 @@
-<ion-view view-title="Viewed Tweets">
+<ion-view view-title="Tweets" hide-back-button="true">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+
   <div class="bar bar-subheader item-input-inset">
     <label class="item item-input item-select" id="channel-select" style="width: 50%">
         <div class="input-label">Channel:</div>
@@ -26,4 +31,14 @@
       </div>
     </div>
   </ion-content>
+  <ion-tabs class="tabs-icon-top tabs-striped">
+    <ion-tab title="Tweets" icon-on="ion-ios-chatboxes" icon-off="ion-ios-chatboxes-outline" ui-sref="app.tweets">
+    </ion-tab>
+    <ion-tab title="Favorites" icon-on="ion-ios-star" icon-off="ion-ios-star-outline" ui-sref="app.favorites">
+    </ion-tab>
+    <ion-tab title="Nopes" icon-on="ion-ios-close" icon-off="ion-ios-close-outline" ui-sref="app.nopes">
+    </ion-tab>
+    <ion-tab title="Recommendations" icon-on="ion-ios-people" icon-off="ion-ios-people-outline" ui-sref="app.recommendations">
+    </ion-tab>
+  </ion-tabs>
 </ion-view>

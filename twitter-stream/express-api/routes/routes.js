@@ -16,6 +16,11 @@ var findLikes = function(req, res, next) {
     .fail( function(err) { res.json({"status" : "error", "message" : err}); });
 };
 
+var findNopes = function(req, res, next) {
+  backend.findNopes(req.user, req.params.channel)
+    .then( function(result) { res.json({"status" : "success", "result" : result }); })
+    .fail( function(err) { res.json({"status" : "error", "message" : err}); });
+};
 
 var findToSwipe = function(req, res, next) {
   backend.findToSwipe(req.user, req.params.channel)
@@ -115,6 +120,7 @@ var appRouter = function(app) {
   app.get('/tweet/:tweet/:channel', findById);
   app.get('/like/:tweet/:channel', likeTweet);
   app.get('/likes/:channel', findLikes);
+  app.get('/nopes/:channel', findNopes);
   app.get('/swipes/:channel', findToSwipe);
   app.get('/nope/:tweet/:channel', nopeTweet);
   app.get('/recommendations/:channel', findRecommendations);
