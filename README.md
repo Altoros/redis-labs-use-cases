@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/Altoros/redis-labs-use-cases.png?label=ready&title=Ready)](https://waffle.io/Altoros/redis-labs-use-cases)
 # RedisLabs Use cases
 
 ## Use cases Apps
