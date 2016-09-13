@@ -1,13 +1,23 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate) {
-
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $rootScope, $state) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
+  $scope.channels = $rootScope.channels;
+
+  $scope.isChannelActive = function(channel) {
+    return (channel == $rootScope.storage.channel);
+  };
+
+  $scope.setChannelActive = function(channel) {
+    $rootScope.storage.channel = channel;
+    $state.reload($rootScope.previousState);
+  };
+
 })
 
 .controller('TweetListCtrl', function($scope, $rootScope, tweet, $q) {
@@ -88,7 +98,7 @@ angular.module('starter.controllers', [])
   $scope.tweet = detail;
 
   socket.on('message', function (message) {
-    if(message.channel == $rootScope.channel) {
+    if(message.channel == $rootScope.storage.channel) {
       $log.debug("IO msg:", message);
       $scope.newTweets.push(message);
     }

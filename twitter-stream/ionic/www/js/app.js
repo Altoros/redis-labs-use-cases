@@ -10,11 +10,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   $rootScope.apiBase = 'http://localhost:3000';
   $rootScope.defaultHashtag = 'sxsw';
-  $rootScope.channel = 'sxsw';
   $rootScope.channels = ['sxsw', 'RedisConf'];
 
-  //Default uuid
-  $rootScope.storage = $localStorage.$default({ 'uuid' : uuid4.generate() });
+  //Default uuid and channel
+  $rootScope.storage = $localStorage.$default({ 'uuid' : uuid4.generate(), 'channel': 'sxsw' });
 
   $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
     $rootScope.previousState = from.name;

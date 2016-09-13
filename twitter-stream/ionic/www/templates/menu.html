@@ -14,25 +14,15 @@
 
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable bar-assertive">
-      <h1 class="title">Menu</h1>
+      <h1 class="title">Channels</h1>
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.stream">
-          <i class="icon ion-chatbox"></i>
-          Tweets
-        </ion-item>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.favorites">
-          <i class="icon ion-star"></i>
-          Favorites
-        </ion-item>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.nopes">
-          <i class="icon ion-close-circled"></i>
-          Nopes
-        </ion-item>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.recommendations">
-          <i class="icon ion-person-stalker"></i>
-          Recommendations
+        <ion-item menu-close class="item item-icon-left" ng-repeat="channel in channels"
+          ng-class="{active: isChannelActive(channel)}"
+          ng-click="setChannelActive(channel)">
+          <i class="icon ion-pound"></i>
+          {{ channel }}
         </ion-item>
       </ion-list>
     </ion-content>
