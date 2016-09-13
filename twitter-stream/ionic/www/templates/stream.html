@@ -8,9 +8,9 @@
         <h2 class="item assertive">Load more items (<strong>{{ newTweets.length }}</strong>)</h2>
       </div>
 
-<div ng-if="previousState == states.recommendations">RECOMMENDATIONS</div>
-<div ng-if="previousState == states.nopes">NOPE</div>
-<div ng-if="previousState == states.favorites">LIKE</div>
+<div ng-if="previousState == states.recommendations && tweet.remove">RECOMMENDATIONS</div>
+<div ng-if="previousState == states.nopes && tweet.remove">NOPE</div>
+<div ng-if="previousState == states.favorites && tweet.remove">LIKE</div>
 
       <td-cards>
         <td-card ng-repeat="card in cards | matcher: swiped" on-destroy="cardDestroyed($index)" on-swipe-left="cardSwipedLeft(card)" on-swipe-right="cardSwipedRight(card)" on-partial-swipe="cardPartialSwipe(amt)" class="card-{{$index}}">
