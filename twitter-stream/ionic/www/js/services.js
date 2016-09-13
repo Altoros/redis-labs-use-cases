@@ -30,12 +30,14 @@ angular.module('starter.services', [])
     return $http.get($rootScope.apiBase + '/recommendations/' + $rootScope.channel);
   };
 
-  _tweet.like = function(id) {
-    return $http.get($rootScope.apiBase + '/like/' + id + '/' + $rootScope.channel );
+  _tweet.like = function(id, remove) {
+    var removeParam = (remove != 1) ? '': '/1';
+    return $http.get($rootScope.apiBase + '/like/' + id + '/' + $rootScope.channel + removeParam );
   };
 
-  _tweet.nope = function(id) {
-    return $http.get($rootScope.apiBase + '/nope/' + id + '/' + $rootScope.channel );
+  _tweet.nope = function(id, remove) {
+    var removeParam = (remove != 1) ? '': '/1';
+    return $http.get($rootScope.apiBase + '/nope/' + id + '/' + $rootScope.channel + removeParam);
   };
 
   _tweet.getFavorites = function() {

@@ -16,6 +16,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   //Default uuid
   $rootScope.storage = $localStorage.$default({ 'uuid' : uuid4.generate() });
 
+  $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+    $rootScope.previousState = from.name;
+    $rootScope.currentState = to.name;
+  });
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -128,6 +133,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       'menuContent': {
         templateUrl: 'templates/stream.html',
         controller: 'StreamCtrl',
+        resolve: {
+          detail : function() {
+            return {};
+          }
+        }
+      }
+    }
+  })
+
+  .state('app.stream-edit', {
+    url: '/stream/:tweetId/:remove',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/stream.html',
+        controller: 'StreamCtrl',
+        resolve: {
+          detail: function(tweet, $stateParams) {
+            if($stateParams.tweetId && $stateParams.remove) {
+              return tweet.findById($stateParams.tweetId).then(function(r) {
+                r.data.result.remove = $stateParams.remove;
+                return r.data.result;
+              });
+            }
+            return {};
+          }
+        }
       }
     }
   })

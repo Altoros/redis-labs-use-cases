@@ -7,7 +7,7 @@
 
   <ion-content id="content" class="has-header">
     <ion-list>
-      <ion-item class="item-icon-right item-avatar" ng-repeat="tweet in tweets" type="item-text-wrap" ui-sref="app.tweet-detail({tweetId: tweet.id })">
+      <ion-item class="item-icon-right item-avatar" ng-repeat="tweet in tweets" type="item-text-wrap" ui-sref="app.stream-edit({tweetId: tweet.id, remove: 0})">
         <img ng-src="img/twitter-icon.png">
         <h2></h2>
         <p>{{tweet.content}}</p>

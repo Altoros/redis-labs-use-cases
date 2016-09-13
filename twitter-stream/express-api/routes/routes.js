@@ -76,15 +76,17 @@ var findById = function(req, res, next) {
 
 
 var nopeTweet = function(req, res, next) {
-  backend.nopeTweet(req.params.tweet, req.user, req.params.channel)
+  var remove = (typeof req.param('remove') !== 'undefined') ? true : false;
+  backend.nopeTweet(req.params.tweet, req.user, req.params.channel, remove)
     .then( function(result) { res.json({"status" : "success", "result" : result }); })
     .fail( function(err) { res.json({"status" : "error", "message" : err}); });
 };
 
 var likeTweet = function(req, res, next) {
-  backend.voteTweet(req.params.tweet, req.user, req.params.channel)
+  var remove = (typeof req.param('remove') !== 'undefined') ? true : false;
+  backend.voteTweet(req.params.tweet, req.user, req.params.channel, false)
     .then(function(result) {
-      backend.likeTweet(req.params.tweet, req.user, req.params.channel)
+      backend.likeTweet(req.params.tweet, req.user, req.params.channel, remove)
       .then( function(result) { res.json({"status" : "success", "result" : result }); })
       .fail( function(err) { res.json({"status" : "error", "message" : err}); });
     })
@@ -118,10 +120,12 @@ var appRouter = function(app) {
   app.get('/hashtag/hashtag/:channel', findByHashtag);
   app.get('/viewed/:channel', findViewed);
   app.get('/tweet/:tweet/:channel', findById);
+  app.get('/like/:tweet/:channel/:remove', likeTweet);
   app.get('/like/:tweet/:channel', likeTweet);
   app.get('/likes/:channel', findLikes);
   app.get('/nopes/:channel', findNopes);
   app.get('/swipes/:channel', findToSwipe);
+  app.get('/nope/:tweet/:channel/:remove', nopeTweet);
   app.get('/nope/:tweet/:channel', nopeTweet);
   app.get('/recommendations/:channel', findRecommendations);
   app.get('/channels/', getChannels);

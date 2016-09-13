@@ -79,9 +79,13 @@ angular.module('starter.controllers', [])
   $scope.tweets = tweetList;
 })
 
-.controller('StreamCtrl', function($scope, $stateParams, TDCardDelegate, tweet, $rootScope, socket, $log) {
+.controller('StreamCtrl', function($scope, $stateParams, TDCardDelegate, tweet, $rootScope, socket, $log, detail) {
   $scope.cards = [];
   $scope.newTweets = [];
+  $scope.loadedNewItems = false;
+  $scope.states = { nopes: 'app.nopes', favorites: 'app.favorites', recommendations: 'app.recommendations' };
+  $scope.previousState = $rootScope.previousState;
+  $scope.tweet = detail;
 
   socket.on('message', function (message) {
     if(message.channel == $rootScope.channel) {
@@ -95,6 +99,7 @@ angular.module('starter.controllers', [])
     $scope.cards = $scope.cards.concat($scope.newTweets);
     $log.debug('All Cards: ', $scope.cards);
     $scope.newTweets = [];
+    $scope.loadedNewItems = true;
   };
 
   $scope.loadNewItems = loadNewItems;
@@ -102,6 +107,9 @@ angular.module('starter.controllers', [])
   var loadData = function() {
     tweet.findToSwipe()
       .then(function(r) {
+        if(Object.keys($scope.tweet).length !== 0 && $scope.loadedNewItems === false) {
+          r.data.result.push($scope.tweet);
+        }
         $scope.cards = r.data.result;
       });
   };
@@ -123,12 +131,12 @@ angular.module('starter.controllers', [])
   };
 
   $scope.cardSwipedLeft = function(card) {
-    tweet.nope(card.id);
+    tweet.nope(card.id, card.remove);
     swipeCard(card);
   };
 
   $scope.cardSwipedRight = function(card) {
-    tweet.like(card.id);
+    tweet.like(card.id, card.remove);
     swipeCard(card);
   };
 
