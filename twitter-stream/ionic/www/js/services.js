@@ -56,6 +56,10 @@ angular.module('starter.services', [])
     return $http.get($rootScope.apiBase + '/channels/add/' + channel);
   };
 
+  _tweet.removeChannel = function(channel) {
+    return $http.get($rootScope.apiBase + '/channels/remove/' + channel);
+  };
+
   _tweet.getChannels = function() {
     return $http.get($rootScope.apiBase + '/channels/');
   };

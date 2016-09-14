@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $rootScope, $state, defaultChannels, userChannels, tweet) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $rootScope, $state, defaultChannels, userChannels, tweet, $ionicPopup) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -29,6 +29,33 @@ angular.module('starter.controllers', [])
       $scope.modal.hide();
       $scope.channels.push(channel);
       $scope.setChannelActive(channel);
+    });
+  };
+
+  $scope.removeChannel = function(channel) {
+    if(defaultChannels.indexOf(channel) !== -1) {
+      $scope.showAlert();
+      return;
+    }
+
+    tweet.removeChannel(channel).then(function(res) {
+      $scope.modal.hide();
+      var index = $scope.channels.indexOf(channel);
+      if( index == -1) {
+        $log.error('Removed channel' , channel, ' from db but it is not present in frontned ');
+        return;
+      }
+      $scope.channels.splice(index, 1);
+      $scope.setChannelActive($scope.channels[0]);
+    });
+  };
+
+  $scope.showAlert = function() {
+    var alertPopup = $ionicPopup.alert({
+      title: 'Message',
+      template: 'You can delete default channels'
+    });
+    alertPopup.then(function(res) {
     });
   };
 

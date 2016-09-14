@@ -420,6 +420,21 @@ exports.addChannel = function(userId, channel) {
   return dfd.promise;
 };
 
+exports.removeChannel = function(userId, channel) {
+  var dfd = Q.defer();
+  var userChannelSet = config.store.channelSet + ':' + userId;
+
+  redis.srem(userChannelSet, channel, function (err, reply) {
+    if(err) {
+      dfd.reject(err);
+      return;
+    }
+    return dfd.resolve(reply);
+  });
+
+  return dfd.promise;
+};
+
 exports.getChannels = function() {
   return config.app.channels;
 };

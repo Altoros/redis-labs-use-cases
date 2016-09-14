@@ -99,6 +99,12 @@ var addChannel = function(req, res, next) {
     .fail( function(err) { res.json({"status" : "error", "message" : err}); });
 };
 
+var removeChannel = function(req, res, next) {
+  backend.removeChannel(req.user, req.params.channel)
+    .then( function(result) { res.json({"status" : "success", "result" : result }); })
+    .fail( function(err) { res.json({"status" : "error", "message" : err}); });
+};
+
 var findUserChannels = function(req, res, next) {
   backend.findUserChannels(req.user)
     .then( function(result) { res.json({"status" : "success", "result" : result }); })
@@ -141,6 +147,7 @@ var appRouter = function(app) {
   app.get('/nope/:tweet/:channel', nopeTweet);
   app.get('/recommendations/:channel', findRecommendations);
   app.get('/channels/add/:channel', addChannel);
+  app.get('/channels/remove/:channel', removeChannel);
   app.get('/channels/user', findUserChannels);
   app.get('/channels/', getChannels);
 };
