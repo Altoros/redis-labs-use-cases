@@ -52,8 +52,11 @@ angular.module('starter.controllers', [])
 
   $scope.showAlert = function() {
     var alertPopup = $ionicPopup.alert({
-      title: 'Message',
-      template: 'You can delete default channels'
+      title: 'Alert!',
+      subTitle: 'You can delete default channels',
+      buttons: [
+        { text: 'OK', type: 'button-assertive' }
+      ]
     });
     alertPopup.then(function(res) {
     });

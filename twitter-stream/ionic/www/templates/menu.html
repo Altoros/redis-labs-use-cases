@@ -21,18 +21,21 @@
       </div>
     </ion-header-bar>
     <ion-content>
-      <ion-list>
-        <ion-item menu-close class="item item-icon-left" ng-repeat="channel in channels"
-          ng-class="{active: isChannelActive(channel)}"
-          ng-click="setChannelActive(channel)">
+      <div class="list">
+
+        <div class="item item-icon-left item-button-right"
+          ng-repeat="channel in channels"
+          ng-class="{active: isChannelActive(channel)}">
           <i class="icon ion-pound"></i>
-          {{ channel }}
-      <div class="buttons">
-        <button class="button button-icon ion-plus-circled" ng-click="removeChannel(channel)">
-        </button>
+          <span ng-click="setChannelActive(channel)" menu-close>
+            {{ channel }}
+          </span>
+          <button class="button button-clear" ng-click="removeChannel(channel)">
+            <i class="icon ion-close-circled"></i>
+          </button>
+        </div>
       </div>
-        </ion-item>
-      </ion-list>
+
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>
