@@ -162,6 +162,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           detail: function(tweet, $stateParams) {
             if($stateParams.tweetId && $stateParams.remove) {
               return tweet.findById($stateParams.tweetId).then(function(r) {
+                if(r.data.result === null) {
+                  return {};
+                }
                 r.data.result.remove = $stateParams.remove;
                 return r.data.result;
               });
