@@ -1,13 +1,13 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $rootScope, $state) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $rootScope, $state, defaultChannels, userChannels, tweet) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-  $scope.channels = $rootScope.channels;
+  $scope.channels = defaultChannels.concat(userChannels);
 
   $scope.isChannelActive = function(channel) {
     return (channel == $rootScope.storage.channel);
@@ -16,6 +16,20 @@ angular.module('starter.controllers', [])
   $scope.setChannelActive = function(channel) {
     $rootScope.storage.channel = channel;
     $state.reload($rootScope.previousState);
+  };
+
+  $ionicModal.fromTemplateUrl('templates/channelmodal.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.createChannel = function(channel) {
+    tweet.addChannel(channel).then(function(res) {
+      $scope.modal.hide();
+      $scope.channels.push(channel);
+      $scope.setChannelActive(channel);
+    });
   };
 
 })

@@ -6,11 +6,9 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.filters', 'ionic.contrib.ui.tinderCards', 'ngStorage', 'uuid4', 'btford.socket-io'])
 
-.run(function($ionicPlatform, $rootScope, $localStorage, uuid4) {
+.run(function($ionicPlatform, $rootScope, $localStorage, uuid4, tweet) {
 
   $rootScope.apiBase = 'http://localhost:3000';
-  $rootScope.defaultHashtag = 'sxsw';
-  $rootScope.channels = ['sxsw', 'RedisConf'];
 
   //Default uuid and channel
   $rootScope.storage = $localStorage.$default({ 'uuid' : uuid4.generate(), 'channel': 'sxsw' });
@@ -56,7 +54,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    controller: 'AppCtrl',
+    resolve: {
+      defaultChannels: function(tweet) {
+        return tweet.getChannels().then(function(res) {
+          return res.data.result;
+        });
+      },
+      userChannels: function(tweet) {
+        return tweet.findUserChannels().then(function(res) {
+          return res.data.result;
+        });
+      }
+    }
   })
 
 

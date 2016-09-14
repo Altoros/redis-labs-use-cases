@@ -10,11 +10,17 @@
       </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent"></ion-nav-view>
+
+
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable bar-assertive">
       <h1 class="title">Channels</h1>
+      <div class="buttons">
+        <button class="button button-icon ion-plus-circled" ng-click="modal.show()">
+        </button>
+      </div>
     </ion-header-bar>
     <ion-content>
       <ion-list>

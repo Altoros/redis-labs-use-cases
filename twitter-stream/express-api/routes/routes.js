@@ -93,6 +93,18 @@ var likeTweet = function(req, res, next) {
     .fail( function(err) { res.json({"status" : "error", "message" : err}); });
 };
 
+var addChannel = function(req, res, next) {
+  backend.addChannel(req.user, req.params.channel)
+    .then( function(result) { res.json({"status" : "success", "result" : result }); })
+    .fail( function(err) { res.json({"status" : "error", "message" : err}); });
+};
+
+var findUserChannels = function(req, res, next) {
+  backend.findUserChannels(req.user)
+    .then( function(result) { res.json({"status" : "success", "result" : result }); })
+    .fail( function(err) { res.json({"status" : "error", "message" : err}); });
+};
+
 var customLogin = function(req, res, next) {
   var token = req.headers['x-access-token'];
   if(!token) {
@@ -128,6 +140,8 @@ var appRouter = function(app) {
   app.get('/nope/:tweet/:channel/:remove', nopeTweet);
   app.get('/nope/:tweet/:channel', nopeTweet);
   app.get('/recommendations/:channel', findRecommendations);
+  app.get('/channels/add/:channel', addChannel);
+  app.get('/channels/user', findUserChannels);
   app.get('/channels/', getChannels);
 };
 

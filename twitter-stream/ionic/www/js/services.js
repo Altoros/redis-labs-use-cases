@@ -48,6 +48,14 @@ angular.module('starter.services', [])
     return $http.get($rootScope.apiBase + '/nopes/' + $rootScope.storage.channel);
   };
 
+  _tweet.findUserChannels = function() {
+    return $http.get($rootScope.apiBase + '/channels/user');
+  };
+
+  _tweet.addChannel = function(channel) {
+    return $http.get($rootScope.apiBase + '/channels/add/' + channel);
+  };
+
   _tweet.getChannels = function() {
     return $http.get($rootScope.apiBase + '/channels/');
   };

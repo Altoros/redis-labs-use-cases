@@ -389,6 +389,37 @@ exports.findByHashtag = function(hashtag, offset, count, userId, channel) {
   return deferred.promise;
 };
 
+exports.findUserChannels= function(userId) {
+  var deferred = Q.defer();
+  var userChannelSet = config.store.channelSet + ':' + userId ;
+
+  redis.smembers(userChannelSet, function (err, response) {
+    var result = [];
+    if(err) {
+      deferred.reject(err);
+      return;
+    }
+    deferred.resolve(response);
+  });
+
+  return deferred.promise;
+};
+
+exports.addChannel = function(userId, channel) {
+  var dfd = Q.defer();
+  var userChannelSet = config.store.channelSet + ':' + userId;
+
+  redis.sadd(userChannelSet, channel, function (err, reply) {
+    if(err) {
+      dfd.reject(err);
+      return;
+    }
+    return dfd.resolve(reply);
+  });
+
+  return dfd.promise;
+};
+
 exports.getChannels = function() {
   return config.app.channels;
 };

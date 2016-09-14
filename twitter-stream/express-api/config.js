@@ -32,7 +32,8 @@ config.store = {
   user_next_id: 'user_next_id',
   likeSet: 'likeSet',
   nopeSet: 'nopeSet',
-  swipedSet: 'swipedSet'
+  swipedSet: 'swipedSet',
+  channelSet: 'channelSet'
 };
 
 module.exports = config;
