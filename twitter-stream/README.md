@@ -24,6 +24,7 @@
   1. likeSet:**USERID**:**CHANNEL** (set: tweetId)
   1. nopeSet:**USERID**:**CHANNEL** (set: tweetId)
   1. swipedSet:**USERID**:**CHANNEL** (set: tweetId)
+  1. channelSet:**USERID** (set: channel)
 
 ## Functions
   1. findRecommendations: Top ten voted tweets
