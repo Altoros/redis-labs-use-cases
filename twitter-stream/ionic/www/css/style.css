@@ -63,6 +63,16 @@ td-card img {
   opacity: 0;
 }
 
+.center-text {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  left: 10px;
+  text-align: center;
+  font-size: 30px;
+  color: #CCC;
+}
+
 .content-text {
   top: 0px;
   position: absolute;
@@ -77,6 +87,8 @@ td-card img {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
+  word-wrap: break-word;
+  max-width: 300px;
 }
 
 .fade {

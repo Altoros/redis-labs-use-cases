@@ -7,15 +7,12 @@
       <div ng-click="loadNewItems()" ng-show="newTweets.length" class="list list-top">
         <h2 class="item assertive">Load more items (<strong>{{ newTweets.length }}</strong>)</h2>
       </div>
-
-<div ng-if="previousState == states.recommendations && tweet.remove">RECOMMENDATIONS</div>
-<div ng-if="previousState == states.nopes && tweet.remove">NOPE</div>
-<div ng-if="previousState == states.favorites && tweet.remove">LIKE</div>
-
       <td-cards>
         <td-card ng-repeat="card in cards | matcher: swiped" on-destroy="cardDestroyed($index)" on-swipe-left="cardSwipedLeft(card)" on-swipe-right="cardSwipedRight(card)" on-partial-swipe="cardPartialSwipe(amt)" class="card-{{$index}}">
           <div class="image">
             <div class="no-text">NOPE</div>
+            <div class="center-text" ng-if="previousState == states.nopes && card.remove == 1">NOPE</div>
+            <div class="center-text" ng-if="previousState == states.favorites && card.remove == 1">LIKE</div>
             <img ng-src="img/twitter-bg.png">
             <div class="yes-text">LIKE</div>
             <div class="content-text"><p ng-bind-html="card.content | linky: '_blank'"></p></div>
