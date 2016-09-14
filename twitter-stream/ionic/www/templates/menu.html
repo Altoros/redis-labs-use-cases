@@ -14,31 +14,28 @@
 
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable bar-assertive">
-      <h1 class="title">Menu</h1>
+      <h1 class="title">Channels</h1>
+      <div class="buttons">
+        <button class="button button-icon ion-plus-circled" ng-click="modal.show()">
+        </button>
+      </div>
     </ion-header-bar>
     <ion-content>
-      <ion-list>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.stream">
-          <i class="icon ion-chatbox"></i>
-          Unviewed Tweets
-        </ion-item>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.tweets">
-          <i class="icon ion-chatbox"></i>
-          Tweets
-        </ion-item>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.favorites">
-          <i class="icon ion-star"></i>
-          Favorites
-        </ion-item>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.nopes">
-          <i class="icon ion-close-circled"></i>
-          Nopes
-        </ion-item>
-        <ion-item menu-close class="item item-icon-left" ui-sref="app.recommendations">
-          <i class="icon ion-person-stalker"></i>
-          Recommendations
-        </ion-item>
-      </ion-list>
+      <div class="list">
+
+        <div class="item item-icon-left item-button-right"
+          ng-repeat="channel in channels"
+          ng-class="{active: isChannelActive(channel)}">
+          <i class="icon ion-pound"></i>
+          <span ng-click="setChannelActive(channel)" menu-close>
+            {{ channel }}
+          </span>
+          <button class="button button-clear" ng-click="removeChannel(channel)">
+            <i class="icon ion-close-circled"></i>
+          </button>
+        </div>
+      </div>
+
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>

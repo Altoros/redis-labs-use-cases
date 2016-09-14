@@ -1,0 +1,16 @@
+<ion-modal-view>
+  <ion-header-bar class="bar bar-header bar-assertive">
+    <h1 class="title">New Channel</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list">
+      <label class="item item-input">
+        <input ng-model="newChannel" type="text" placeholder="Channel Name">
+      </label>
+      <div class="padding text-right">
+        <button class="button button-clear button-assertive" ng-click="modal.hide()"><i class="icon ion-close-circled"></i> Cancel</button>
+        <button class="button button-assertive" ng-click="createChannel(newChannel)"><i class="icon ion-checkmark-circled"></i> Create</button>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>

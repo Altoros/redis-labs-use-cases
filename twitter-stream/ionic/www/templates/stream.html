@@ -1,4 +1,8 @@
-<ion-view view-title="Unviewed tweets">
+<ion-view view-title="Tweets" hide-back-button="true">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+
   <ion-content>
       <div ng-click="loadNewItems()" ng-show="newTweets.length" class="list list-top">
         <h2 class="item assertive">Load more items (<strong>{{ newTweets.length }}</strong>)</h2>
@@ -7,6 +11,8 @@
         <td-card ng-repeat="card in cards | matcher: swiped" on-destroy="cardDestroyed($index)" on-swipe-left="cardSwipedLeft(card)" on-swipe-right="cardSwipedRight(card)" on-partial-swipe="cardPartialSwipe(amt)" class="card-{{$index}}">
           <div class="image">
             <div class="no-text">NOPE</div>
+            <div class="center-text" ng-if="previousState == states.nopes && card.remove == 1">NOPE</div>
+            <div class="center-text" ng-if="previousState == states.favorites && card.remove == 1">LIKE</div>
             <img ng-src="img/twitter-bg.png">
             <div class="yes-text">LIKE</div>
             <div class="content-text"><p ng-bind-html="card.content | linky: '_blank'"></p></div>
@@ -19,4 +25,14 @@
         </div>
       </td-cards>
   </ion-content>
+  <ion-tabs class="tabs-icon-top tabs-striped">
+    <ion-tab title="Tweets" icon-on="ion-ios-chatboxes" icon-off="ion-ios-chatboxes-outline" ui-sref="app.stream">
+    </ion-tab>
+    <ion-tab title="Favorites" icon-on="ion-ios-star" icon-off="ion-ios-star-outline" ui-sref="app.favorites">
+    </ion-tab>
+    <ion-tab title="Nopes" icon-on="ion-ios-close" icon-off="ion-ios-close-outline" ui-sref="app.nopes">
+    </ion-tab>
+    <ion-tab title="Recommendations" icon-on="ion-ios-people" icon-off="ion-ios-people-outline" ui-sref="app.recommendations">
+    </ion-tab>
+  </ion-tabs>
 </ion-view>

@@ -6,15 +6,17 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.filters', 'ionic.contrib.ui.tinderCards', 'ngStorage', 'uuid4', 'btford.socket-io'])
 
-.run(function($ionicPlatform, $rootScope, $localStorage, uuid4) {
+.run(function($ionicPlatform, $rootScope, $localStorage, uuid4, tweet) {
 
   $rootScope.apiBase = 'http://localhost:3000';
-  $rootScope.defaultHashtag = 'sxsw';
-  $rootScope.channel = 'sxsw';
-  $rootScope.channels = ['sxsw', 'RedisConf'];
 
-  //Default uuid
-  $rootScope.storage = $localStorage.$default({ 'uuid' : uuid4.generate() });
+  //Default uuid and channel
+  $rootScope.storage = $localStorage.$default({ 'uuid' : uuid4.generate(), 'channel': 'sxsw' });
+
+  $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+    $rootScope.previousState = from.name;
+    $rootScope.currentState = to.name;
+  });
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -52,7 +54,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    controller: 'AppCtrl',
+    resolve: {
+      defaultChannels: function(tweet) {
+        return tweet.getChannels().then(function(res) {
+          return res.data.result;
+        });
+      },
+      userChannels: function(tweet) {
+        return tweet.findUserChannels().then(function(res) {
+          return res.data.result;
+        });
+      }
+    }
   })
 
 
@@ -128,6 +142,36 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       'menuContent': {
         templateUrl: 'templates/stream.html',
         controller: 'StreamCtrl',
+        resolve: {
+          detail : function() {
+            return {};
+          }
+        }
+      }
+    }
+  })
+
+  .state('app.stream-edit', {
+    url: '/stream/:tweetId/:remove',
+    cache: false,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/stream.html',
+        controller: 'StreamCtrl',
+        resolve: {
+          detail: function(tweet, $stateParams) {
+            if($stateParams.tweetId && $stateParams.remove) {
+              return tweet.findById($stateParams.tweetId).then(function(r) {
+                if(r.data.result === null) {
+                  return {};
+                }
+                r.data.result.remove = $stateParams.remove;
+                return r.data.result;
+              });
+            }
+            return {};
+          }
+        }
       }
     }
   })

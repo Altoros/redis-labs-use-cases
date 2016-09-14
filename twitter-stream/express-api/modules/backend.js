@@ -146,10 +146,11 @@ exports.findNopes = function(userId, channel) {
   return deferred.promise;
 };
 
-exports.voteTweet = function(tweetId, userId, channel) {
+exports.voteTweet = function(tweetId, userId, channel, remove) {
+  var inc = (remove) ? -1 : 1;
   var voteZsetChannel = config.store.voteZset + ':' + channel;
   var dfd = Q.defer();
-  redis.zincrby(voteZsetChannel, 1, tweetId, function (err, reply) {
+  redis.zincrby(voteZsetChannel, inc, tweetId, function (err, reply) {
     if(err) {
       dfd.reject(err);
       return;
@@ -160,7 +161,7 @@ exports.voteTweet = function(tweetId, userId, channel) {
   return dfd.promise;
 };
 
-exports.likeTweet = function(tweetId, userId, channel) {
+exports.likeTweet = function(tweetId, userId, channel, remove) {
   var dfd = Q.defer();
   var userLikeSet = config.store.likeSet + ':' + userId + ':' + channel;
 
@@ -169,17 +170,65 @@ exports.likeTweet = function(tweetId, userId, channel) {
       dfd.reject(err);
       return;
     }
-    return dfd.resolve(reply);
+
+    if(remove) {
+      exports.removeFromSet(config.store.nopeSet, tweetId, userId, channel)
+        .then(function(reply) {
+          dfd.resolve(reply);
+        })
+        .fail(function(err)  {
+          dfd.reject(err);
+          return;
+        });
+    } else {
+      return dfd.resolve(reply);
+    }
   });
 
   return dfd.promise;
 };
 
-exports.nopeTweet = function(tweetId, userId, channel) {
+exports.nopeTweet = function(tweetId, userId, channel, remove) {
   var dfd = Q.defer();
   var userNopeSet = config.store.nopeSet + ':' + userId + ':' + channel;
 
   redis.sadd(userNopeSet, tweetId, function (err, reply) {
+    if(err) {
+      dfd.reject(err);
+      return;
+    }
+
+    if(remove) {
+      exports.removeFromSet(config.store.likeSet, tweetId, userId, channel)
+        .then(function(reply) {
+          exports.voteTweet(tweetId, userId, channel, true)
+            .then(function(reply) {
+              dfd.resolve(reply);
+            })
+            .fail(function(err)  {
+              dfd.reject(err);
+              return;
+            });
+        })
+        .fail(function(err)  {
+          dfd.reject(err);
+          return;
+        });
+    } else {
+      return dfd.resolve(reply);
+    }
+
+  });
+
+  return dfd.promise;
+};
+
+exports.removeFromSet = function(setType, tweetId, userId, channel) {
+  var dfd = Q.defer();
+
+  var userTypeSet = setType + ':' + userId + ':' + channel;
+
+  redis.srem(userTypeSet, tweetId, function (err, reply) {
     if(err) {
       dfd.reject(err);
       return;
@@ -189,6 +238,7 @@ exports.nopeTweet = function(tweetId, userId, channel) {
 
   return dfd.promise;
 };
+
 
 exports.findById = function(tweetId, userId, channel) {
   var res = null;
@@ -337,6 +387,52 @@ exports.findByHashtag = function(hashtag, offset, count, userId, channel) {
   });
 
   return deferred.promise;
+};
+
+exports.findUserChannels= function(userId) {
+  var deferred = Q.defer();
+  var userChannelSet = config.store.channelSet + ':' + userId ;
+
+  redis.smembers(userChannelSet, function (err, response) {
+    var result = [];
+    if(err) {
+      deferred.reject(err);
+      return;
+    }
+    deferred.resolve(response);
+  });
+
+  return deferred.promise;
+};
+
+exports.addChannel = function(userId, channel) {
+  var dfd = Q.defer();
+  var userChannelSet = config.store.channelSet + ':' + userId;
+
+  redis.sadd(userChannelSet, channel, function (err, reply) {
+    if(err) {
+      dfd.reject(err);
+      return;
+    }
+    return dfd.resolve(reply);
+  });
+
+  return dfd.promise;
+};
+
+exports.removeChannel = function(userId, channel) {
+  var dfd = Q.defer();
+  var userChannelSet = config.store.channelSet + ':' + userId;
+
+  redis.srem(userChannelSet, channel, function (err, reply) {
+    if(err) {
+      dfd.reject(err);
+      return;
+    }
+    return dfd.resolve(reply);
+  });
+
+  return dfd.promise;
 };
 
 exports.getChannels = function() {

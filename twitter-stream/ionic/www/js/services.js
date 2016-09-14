@@ -11,39 +11,53 @@ angular.module('starter.services', [])
   var _swiped = [];
 
   _tweet.findByHashtag = function(hashtag, queryString) {
-    return $http.get($rootScope.apiBase + '/hashtag/' + hashtag + '/' + $rootScope.channel, { params: queryString });
+    return $http.get($rootScope.apiBase + '/hashtag/' + hashtag + '/' + $rootScope.storage.channel, { params: queryString });
   };
 
   _tweet.findToSwipe = function(queryString) {
-    return $http.get($rootScope.apiBase + '/swipes/' + $rootScope.channel, { params: queryString });
+    return $http.get($rootScope.apiBase + '/swipes/' + $rootScope.storage.channel, { params: queryString });
   };
 
   _tweet.findViewed = function(search, queryString) {
-    return $http.get($rootScope.apiBase + '/viewed/' + $rootScope.channel, { params: queryString });
+    return $http.get($rootScope.apiBase + '/viewed/' + $rootScope.storage.channel, { params: queryString });
   };
 
   _tweet.findById = function(id) {
-    return $http.get($rootScope.apiBase + '/tweet/' + id + '/' + $rootScope.channel );
+    return $http.get($rootScope.apiBase + '/tweet/' + id + '/' + $rootScope.storage.channel );
   };
 
   _tweet.findRecommendations = function() {
-    return $http.get($rootScope.apiBase + '/recommendations/' + $rootScope.channel);
+    return $http.get($rootScope.apiBase + '/recommendations/' + $rootScope.storage.channel);
   };
 
-  _tweet.like = function(id) {
-    return $http.get($rootScope.apiBase + '/like/' + id + '/' + $rootScope.channel );
+  _tweet.like = function(id, remove) {
+    var removeParam = (remove != 1) ? '': '/1';
+    return $http.get($rootScope.apiBase + '/like/' + id + '/' + $rootScope.storage.channel + removeParam );
   };
 
-  _tweet.nope = function(id) {
-    return $http.get($rootScope.apiBase + '/nope/' + id + '/' + $rootScope.channel );
+  _tweet.nope = function(id, remove) {
+    var removeParam = (remove != 1) ? '': '/1';
+    return $http.get($rootScope.apiBase + '/nope/' + id + '/' + $rootScope.storage.channel + removeParam);
   };
 
   _tweet.getFavorites = function() {
-    return $http.get($rootScope.apiBase + '/likes/' + $rootScope.channel);
+    return $http.get($rootScope.apiBase + '/likes/' + $rootScope.storage.channel);
   };
 
   _tweet.getNopes = function() {
-    return $http.get($rootScope.apiBase + '/nopes/' + $rootScope.channel);
+    return $http.get($rootScope.apiBase + '/nopes/' + $rootScope.storage.channel);
+  };
+
+  _tweet.findUserChannels = function() {
+    return $http.get($rootScope.apiBase + '/channels/user');
+  };
+
+  _tweet.addChannel = function(channel) {
+    return $http.get($rootScope.apiBase + '/channels/add/' + channel);
+  };
+
+  _tweet.removeChannel = function(channel) {
+    return $http.get($rootScope.apiBase + '/channels/remove/' + channel);
   };
 
   _tweet.getChannels = function() {
