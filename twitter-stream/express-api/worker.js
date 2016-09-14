@@ -8,6 +8,7 @@ var twitterText = require('twitter-text');
 var async = require('async');
 var stringHash = require('string-hash');
 var _ = require('lodash');
+var Q = require('q');
 
 // Set up Twitter client
 var client = new Twitter(config.twitter);
@@ -77,4 +78,35 @@ var twitterSubscribe  = function(channel) {
   });
 };
 
-_.mapKeys(config.app.channels, twitterSubscribe);
+var getKeys = function() {
+  var dfd = Q.defer();
+  var usersChannelSet = config.store.channelSet + ':*';
+  redis.keys(usersChannelSet, function (err, reply) {
+    if(err) {
+      dfd.reject(err);
+      return;
+    }
+    return dfd.resolve(reply);
+  });
+
+  return dfd.promise;
+};
+
+var getUsersChannels = function() {
+  var dfd = Q.defer();
+  getKeys().then(function(keys) {
+    redis.sunion(keys, function (err, reply) {
+      if(err) {
+        dfd.reject(err);
+        return;
+      }
+      return dfd.resolve(reply);
+    });
+  });
+  return dfd.promise;
+};
+
+getUsersChannels().then(function(channels) {
+  var allChannels = config.app.channels.concat(channels);
+  _.mapKeys(allChannels, twitterSubscribe);
+});
