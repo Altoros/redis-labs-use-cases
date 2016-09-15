@@ -34,9 +34,9 @@ subs_redis.on("subscribe", function(channel, count) {
 subs_redis.on("message", function(channel, message) {
   if(channel === config.redis.subscribe_new_channels) {
     console.log("New channel message from " + channel + ": " + message);
-    if(allChannels.indexOf(channel) === -1 ) {
-      allChannels.push(channel);
-      twitterSubscribe(channel);
+    if(allChannels.indexOf(message) === -1 ) {
+      allChannels.push(message);
+      twitterSubscribe(message);
     }
   }
 });
@@ -49,6 +49,7 @@ subs_redis.subscribe(config.redis.subscribe_new_channels);
  **/
 var twitterSubscribe  = function(channel) {
   client.stream('statuses/filter', {track: channel, lang: 'en'},  function(stream) {
+    console.log("Initiating Streaming from", channel);
     stream.on('data', function(tweet) {
       var tweetHashChannel = config.store.tweetHash + ':' + channel;
       var tweetSetChannel = config.store.tweetSet + ':' + channel;
@@ -115,6 +116,10 @@ var getUsersChannels = function() {
   var dfd = Q.defer();
   getKeys()
     .then(function(keys) {
+      if(keys.length === 0) {
+        return dfd.resolve(keys);
+      }
+
       redis.sunion(keys, function (err, reply) {
         if(err) {
           dfd.reject(err);
