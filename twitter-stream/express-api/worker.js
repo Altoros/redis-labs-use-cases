@@ -10,19 +10,38 @@ var stringHash = require('string-hash');
 var _ = require('lodash');
 var Q = require('q');
 
+var allChannels = [];
+
 // Set up Twitter client
 var client = new Twitter(config.twitter);
 
 // Set up connection to Redis
 var redis_conn = require("redis");
 var redis = redis_conn.createClient(config.redis.url, {no_ready_check: true});
+var subs_redis = redis.duplicate();
+
+// redis default events
+//redis.config("SET","notify-keyspace-events", "KEA");
 
 redis.on("error", function (err) {
-    console.log("Error: " + err);
+  console.log("Error: " + err);
 });
 
+subs_redis.on("subscribe", function(channel, count) {
+  console.log("Subscribed to " + channel + ". Now subscribed to " + count + " channel(s).");
+});
 
-console.log("Initiating Streaming from", config.app.channels);
+subs_redis.on("message", function(channel, message) {
+  if(channel === config.redis.subscribe_new_channels) {
+    console.log("New channel message from " + channel + ": " + message);
+    if(allChannels.indexOf(channel) === -1 ) {
+      allChannels.push(channel);
+      twitterSubscribe(channel);
+    }
+  }
+});
+
+subs_redis.subscribe(config.redis.subscribe_new_channels);
 
 /**
  * Stream statuses filtered by keyword
@@ -94,19 +113,29 @@ var getKeys = function() {
 
 var getUsersChannels = function() {
   var dfd = Q.defer();
-  getKeys().then(function(keys) {
-    redis.sunion(keys, function (err, reply) {
-      if(err) {
-        dfd.reject(err);
-        return;
-      }
-      return dfd.resolve(reply);
+  getKeys()
+    .then(function(keys) {
+      redis.sunion(keys, function (err, reply) {
+        if(err) {
+          dfd.reject(err);
+          return;
+        }
+        return dfd.resolve(reply);
+      });
+    })
+    .fail(function(err) {
+      dfd.reject(err);
     });
-  });
+
   return dfd.promise;
 };
 
-getUsersChannels().then(function(channels) {
-  var allChannels = config.app.channels.concat(channels);
-  _.mapKeys(allChannels, twitterSubscribe);
-});
+getUsersChannels()
+  .then(function(channels) {
+    allChannels = config.app.channels.concat(channels);
+    console.log("Initiating Streaming from", allChannels);
+    _.mapKeys(allChannels, twitterSubscribe);
+  })
+  .fail(function(err) {
+    console.log(err);
+  });

@@ -9,6 +9,7 @@ config.app = {
 
 config.redis = {
   url: process.env.REDISCLOUD_URL || 'redis://localhost:6379',
+  subscribe_new_channels: 'newChannel'
 };
 
 config.io = {

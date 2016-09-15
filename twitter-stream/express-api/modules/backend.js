@@ -414,6 +414,7 @@ exports.addChannel = function(userId, channel) {
       dfd.reject(err);
       return;
     }
+    redis.publish(config.redis.subscribe_new_channels, channel);
     return dfd.resolve(reply);
   });
 
