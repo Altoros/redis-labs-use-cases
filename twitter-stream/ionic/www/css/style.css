@@ -107,3 +107,12 @@ td-card img {
   text-align: center;
   cursor: pointer;
 }
+
+.compose-modal .left {
+  float: left;
+  padding: 16px;
+
+}
+.compose-modal textarea:focus {
+  height: 100px;
+}

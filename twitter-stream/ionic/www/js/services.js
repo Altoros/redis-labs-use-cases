@@ -64,6 +64,11 @@ angular.module('starter.services', [])
     return $http.get($rootScope.apiBase + '/channels/');
   };
 
+  _tweet.addTweet = function(content) {
+    var data = { content: content };
+    return $http.post($rootScope.apiBase + '/tweet/add/' + $rootScope.storage.channel, data);
+  };
+
   _tweet.swipe = function(tweet) {
     var exists = false;
     for (var i = 0; i < _swiped.length; i++) {

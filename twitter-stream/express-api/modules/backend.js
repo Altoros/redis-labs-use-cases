@@ -2,6 +2,8 @@ var config = require('./../config');
 var stringHash = require('string-hash');
 var async = require('async');
 var Q = require('q');
+var indexTweet = require('./../lib').indexTweet;
+var getRandom = require('./../lib').getRandom;
 
 // Set up connection to Redis
 var redis_conn = require("redis");
@@ -433,6 +435,18 @@ exports.removeChannel = function(userId, channel) {
     return dfd.resolve(reply);
   });
 
+  return dfd.promise;
+};
+
+exports.addTweet = function(channel, content) {
+  var dfd = Q.defer();
+  var id_str = getRandom(19);
+  var tweet = {
+    'id_str': id_str,
+    'text': content,
+  };
+  indexTweet(redis, channel, tweet);
+  dfd.resolve(true);
   return dfd.promise;
 };
 

@@ -4,6 +4,10 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
 
+  <ion-nav-buttons side="right">
+    <button class="button button-icon ion-compose activated" ng-click="showTweetModal()"></button>
+  </ion-nav-buttons>
+
   <ion-content id="content" class="has-header">
     <ion-list>
       <ion-item class="item-icon-right item-avatar" ng-repeat="tweet in tweets" type="item-text-wrap" ui-sref="app.stream-edit({tweetId: tweet.id, remove: 1})">

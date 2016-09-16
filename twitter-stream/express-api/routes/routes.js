@@ -105,6 +105,12 @@ var removeChannel = function(req, res, next) {
     .fail( function(err) { res.json({"status" : "error", "message" : err}); });
 };
 
+var addTweet = function(req, res, next) {
+  backend.addTweet(req.params.channel, req.body.content)
+    .then( function(result) { res.json({"status" : "success", "result" : result }); })
+    .fail( function(err) { res.json({"status" : "error", "message" : err}); });
+};
+
 var findUserChannels = function(req, res, next) {
   backend.findUserChannels(req.user)
     .then( function(result) { res.json({"status" : "success", "result" : result }); })
@@ -137,6 +143,7 @@ var appRouter = function(app) {
   app.get('/', rootFunc);
   app.get('/hashtag/hashtag/:channel', findByHashtag);
   app.get('/viewed/:channel', findViewed);
+  app.post('/tweet/add/:channel', addTweet);
   app.get('/tweet/:tweet/:channel', findById);
   app.get('/like/:tweet/:channel/:remove', likeTweet);
   app.get('/like/:tweet/:channel', likeTweet);

@@ -18,15 +18,20 @@ angular.module('starter.controllers', [])
     $state.reload($rootScope.previousState);
   };
 
-  $ionicModal.fromTemplateUrl('templates/channelmodal.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+
+  $scope.showChannelModal = function() {
+    $ionicModal.fromTemplateUrl('templates/channelmodal.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    });
+  };
 
   $scope.createChannel = function(channel) {
     tweet.addChannel(channel).then(function(res) {
       $scope.modal.hide();
+      $scope.modal.remove();
       $scope.channels.push(channel);
       $scope.setChannelActive(channel);
     });
@@ -59,6 +64,24 @@ angular.module('starter.controllers', [])
       ]
     });
     alertPopup.then(function(res) {
+    });
+  };
+
+  $scope.createTweet = function(content) {
+    tweet.addTweet(content).then(
+      function(res) {
+        $scope.modalCompose.hide();
+        $scope.modalCompose.remove();
+      }
+    );
+  };
+
+  $scope.showTweetModal = function () {
+    $ionicModal.fromTemplateUrl('templates/composemodal.html', {
+      scope: $scope
+    }).then(function(modalCompose) {
+      $scope.modalCompose = modalCompose;
+      $scope.modalCompose.show();
     });
   };
 
