@@ -8,7 +8,6 @@
       <label class="item item-input">
         <textarea ng-model="newTweet" placeholder="What's happeninig?" maxlength="140"></textarea>
       </label>
-      <input type="file" ngf-select ng-model="picFile" name="file" accept="image/*" ngf-max-size="2MB" ngf-model-invalid="errorFile">
       <p class="left">{{ 140 - newTweet.length }}</p>
       <div class="padding text-right">
         <button class="button button-clear button-assertive" ng-click="modalCompose.hide()"><i class="icon ion-close-circled"></i> Cancel</button>
