@@ -139,6 +139,7 @@ var getChannels = function(req, res, next) {
 };
 
 var appRouter = function(app) {
+  app.get('/channels/', getChannels);
   app.use(customLogin);
   app.get('/', rootFunc);
   app.get('/hashtag/hashtag/:channel', findByHashtag);
@@ -156,7 +157,6 @@ var appRouter = function(app) {
   app.get('/channels/add/:channel', addChannel);
   app.get('/channels/remove/:channel', removeChannel);
   app.get('/channels/user', findUserChannels);
-  app.get('/channels/', getChannels);
 };
 
 module.exports = appRouter;
