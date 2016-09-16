@@ -1,4 +1,9 @@
 var backend = require("./../modules/backend.js");
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
+var fs = require('fs');
+var path = require('path');
+var cloudinary = require('cloudinary');
 
 var rootFunc = function(req, res) {
   res.send("Twitter Stream: Express API");
@@ -106,9 +111,21 @@ var removeChannel = function(req, res, next) {
 };
 
 var addTweet = function(req, res, next) {
-  backend.addTweet(req.params.channel, req.body.content)
-    .then( function(result) { res.json({"status" : "success", "result" : result }); })
-    .fail( function(err) { res.json({"status" : "error", "message" : err}); });
+  var cloudinary = require('cloudinary');
+
+  if(req.file) {
+    cloudinary.uploader.upload(req.file.path, function(result) {
+      req.body.content += '<img src="'+ result.url +'"/>';
+
+      backend.addTweet(req.params.channel, req.body.content)
+        .then( function(result) { res.json({"status" : "success", "result" : result }); })
+        .fail( function(err) { res.json({"status" : "error", "message" : err}); });
+    }, {width: 250, height: 150, crop: "fit"} );
+  } else {
+    backend.addTweet(req.params.channel, req.body.content)
+      .then( function(result) { res.json({"status" : "success", "result" : result }); })
+      .fail( function(err) { res.json({"status" : "error", "message" : err}); });
+  }
 };
 
 var findUserChannels = function(req, res, next) {
@@ -144,7 +161,7 @@ var appRouter = function(app) {
   app.get('/', rootFunc);
   app.get('/hashtag/hashtag/:channel', findByHashtag);
   app.get('/viewed/:channel', findViewed);
-  app.post('/tweet/add/:channel', addTweet);
+  app.post('/tweet/add/:channel', upload.single('file'), addTweet);
   app.get('/tweet/:tweet/:channel', findById);
   app.get('/like/:tweet/:channel/:remove', likeTweet);
   app.get('/like/:tweet/:channel', likeTweet);

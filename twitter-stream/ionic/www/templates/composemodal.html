@@ -6,10 +6,12 @@
     <div class="list padding compose-modal">
 
       <label class="item item-input">
-        <textarea ng-model="newTweet" placeholder="What's happeninig?" maxlength="140"></textarea>
+        <textarea ng-model="newTweet" id="textarea" placeholder="What's happening?" maxlength="140"></textarea>
       </label>
       <p class="left">{{ 140 - newTweet.length }}</p>
       <div class="padding text-right">
+      <button class="button button-clear button-assertive button-float-left" ngf-select ng-model="picFile" name="file" accept="image/*" ngf-max-size="2MB"><i class="icon ion-camera"></i> Upload</button>
+       <img ng-if="picFile" ngf-thumbnail="picFile || '/thumb.jpg'" ngf-size="{width: 40, height: 40, quality: 0.9}" class="thumbnail">
         <button class="button button-clear button-assertive" ng-click="modalCompose.hide()"><i class="icon ion-close-circled"></i> Cancel</button>
         <button class="button button-assertive" ng-click="createTweet(newTweet, picFile)"><i class="icon ion-social-twitter"></i> Tweet</button>
       </div>

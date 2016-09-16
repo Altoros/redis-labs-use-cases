@@ -113,6 +113,20 @@ td-card img {
   padding: 16px;
 
 }
+
 .compose-modal textarea:focus {
   height: 100px;
+}
+
+.compose-modal p{
+  margin-top: 8px;
+}
+
+.thumbnail{
+  margin-top: 10px;
+  float: left;
+}
+
+.button-float-left{
+  float: left;
 }
