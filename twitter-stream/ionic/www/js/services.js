@@ -84,5 +84,9 @@ angular.module('starter.services', [])
     return _swiped;
   };
 
+  _tweet.resetSwiped = function() {
+    _swiped = [];
+  };
+
   return _tweet;
 });

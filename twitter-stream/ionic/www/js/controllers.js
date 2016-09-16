@@ -207,6 +207,10 @@ angular.module('starter.controllers', [])
     $scope.swiped = tweet.getSwiped();
   };
 
+  var resetSwiped = function() {
+    tweet.resetSwiped();
+  };
+
   $scope.cardSwipedLeft = function(card) {
     tweet.nope(card.id, card.remove);
     swipeCard(card);
@@ -217,7 +221,7 @@ angular.module('starter.controllers', [])
     swipeCard(card);
   };
 
-  updateSwiped();
+  resetSwiped();
   loadData();
 
 })
