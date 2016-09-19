@@ -1,5 +1,24 @@
 angular.module('starter.controllers', [])
 
+.filter('unsafe', ['$sce', function ($sce) {
+  return function (val) {
+    return $sce.trustAsHtml(val);
+  };
+}])
+
+.filter('parseUrlFilter', function () {
+    var urlPattern =  /\s{1}((https?|ftp):\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+    return function (text, target) {
+      return text.replace(urlPattern, ' <a target="' + target + '" href="$&">$&</a>');
+    };
+})
+
+.filter('htmlToPlaintext', function() {
+  return function(text) {
+    return  text ? String(text).replace(/<[^>]+>/gm, '') : '';
+  };
+})
+
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $rootScope, $state, defaultChannels, userChannels, tweet, $ionicPopup) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -67,13 +86,15 @@ angular.module('starter.controllers', [])
     });
   };
 
-  $scope.createTweet = function(content) {
-    tweet.addTweet(content).then(
-      function(res) {
-        $scope.modalCompose.hide();
-        $scope.modalCompose.remove();
-      }
-    );
+  $scope.createTweet = function(content, picFile) {
+    if(content !== '') {
+      tweet.addTweet(content, picFile).then(
+        function(res) {
+          $scope.modalCompose.hide();
+          $scope.modalCompose.remove();
+        }
+      );
+    }
   };
 
   $scope.showTweetModal = function () {
@@ -82,6 +103,13 @@ angular.module('starter.controllers', [])
     }).then(function(modalCompose) {
       $scope.modalCompose = modalCompose;
       $scope.modalCompose.show();
+      var textarea = document.getElementById("textarea");
+      var heightLimit = 100;
+
+      textarea.oninput = function() {
+        textarea.style.height = "";
+        textarea.style.height = Math.min(textarea.scrollHeight, heightLimit) + "px";
+      };
     });
   };
 

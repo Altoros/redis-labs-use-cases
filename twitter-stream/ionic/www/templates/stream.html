@@ -19,7 +19,7 @@
             <div class="center-text" ng-if="previousState == states.favorites && card.remove == 1">LIKE</div>
             <img ng-src="img/twitter-bg.png">
             <div class="yes-text">LIKE</div>
-            <div class="content-text"><p ng-bind-html="card.content | linky: '_blank'"></p></div>
+            <div class="content-text"><p ng-bind-html="card.content | parseUrlFilter: '_blank' | unsafe"></p></div>
           </div>
         </td-card>
         <div class="card" ng-show="!cards.length">

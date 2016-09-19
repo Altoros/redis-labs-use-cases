@@ -24,6 +24,7 @@ Install all dependencies:
 
   1. Redis server credentials (Default config is local)
 
+  1. CLOUDINARY_URL env var to support uploading files
 
 ## Usage
 

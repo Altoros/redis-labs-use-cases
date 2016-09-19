@@ -6,7 +6,7 @@ angular.module('starter.services', [])
   });
 })
 
-.factory('tweet', function ($http, $rootScope) {
+.factory('tweet', function ($http, $rootScope, Upload) {
   var _tweet = {};
   var _swiped = [];
 
@@ -64,9 +64,9 @@ angular.module('starter.services', [])
     return $http.get($rootScope.apiBase + '/channels/');
   };
 
-  _tweet.addTweet = function(content) {
-    var data = { content: content };
-    return $http.post($rootScope.apiBase + '/tweet/add/' + $rootScope.storage.channel, data);
+  _tweet.addTweet = function(content, picFile) {
+    var data = { data: { content: content, file: picFile }, url: $rootScope.apiBase + '/tweet/add/' + $rootScope.storage.channel };
+    return Upload.upload(data);
   };
 
   _tweet.swipe = function(tweet) {

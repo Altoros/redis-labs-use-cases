@@ -12,7 +12,7 @@
       <ion-item class="item-icon-right item-avatar" ng-repeat="tweet in tweets" type="item-text-wrap" ui-sref="app.stream-edit({tweetId: tweet.id, remove: 1})">
         <img ng-src="img/twitter-icon.png">
         <h2></h2>
-        <p>{{tweet.content}}</p>
+        <p>{{tweet.content | htmlToPlaintext }}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>
